@@ -9,6 +9,7 @@ __pycache__/
 # Dependencies
 myenv*
 .idea*
+test_data*
 
 # Distribution / packaging
 .Python
