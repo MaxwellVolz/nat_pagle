@@ -1,8 +1,6 @@
 """Pat Nagle - new world fishing man
 
-Screenshot window capture in real-time.
-Reference: https://www.learncodebygaming.com/blog/fast-window-capture
-Test Mouse Clicks: https://www.onlinemictest.com/mouse-test/
+Hands-free fishing to reduce gamer oppression.
 """
 import time
 import os

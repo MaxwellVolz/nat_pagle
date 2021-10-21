@@ -1,24 +1,43 @@
 # nat_pagle
 Python Bot with OpenCV
 
+## Useful Links
+
+| Link    | Purpose |
+| ------- | ------- |
+| [PyAutoGUI Docs](https://pyautogui.readthedocs.io/en/latest/)                 | Control mouse and keyboard |
+| [OpenCV Docs](https://docs.opencv.org/master/d6/d00/tutorial_py_root.html)    | Computer Vision            | 
+| [Example Project](https://www.learncodebygaming.com/blog/fast-window-capture) | Blog with example bot      |
+| [Test Mouse Clicks](https://www.onlinemictest.com/mouse-test/)                | Mouse click website        |
+
 ## Bot Progression Tracker
 
 | Description | Status      | Challenges |
 | ----------- | ----------- | ----------- |
-| Arbitrary Static Image Matching  | Done        |                  |
-| Real-Time Image Matching         | Not Started |                  |
-| Inputs with PyAutoGUI            | Not Started | Learn PyAutoGUI  |
-| New World Static Image Matching  | Done        |                  |
-| New World Image Collection       | Test Ready  |                  |
-| New World Fishing Procedure      | Test Ready  |                  |
-| New World Live Image Matching    | Not Started |                  |
+| Arbitrary Static Image Matching  | Done        |                                 |
+| Real-Time Image Matching         | Done        |                                 |
+| Inputs with PyAutoGUI            | Working     |                                 |
+| New World Static Image Matching  | Done        |                                 |
+| New World Image Collection       | Done        | Different resolutions needed    |
+| New World Fishing Procedure      | Working     |                                 |
+| New World Live Image Matching    | Done        |                                 |
+| Rare Catch Rotation to Pin       | Not Started |                                 |
+| Stop Bot on X Repeated Actions   | Not Started |                                 |
+| Dead Check and Logout            | Not Started |                                 |                                               
+| Compile to .exe                  | Not Started |                                 |                                               
+| GUI                              | Not Started |                                 |                                               
+| How to Use                       | Poorly Done |                                 |                                               
+| Global Keypress for Operation    | Test Done   |                                 |                                               
+| Custom Parameters                | Not Started |                                 |                                               
+
+## How to Use
+
+1. Run *main.py*
+2. Alt-Tab to game
+3. Facing water, pull out fishing pole
+4. If you catch a rare fish you have to re-orient to water (fix soon, maybe)
 
 ## New World Fishing Procedure
-
-Prerequisites
-
-1. Facing Water
-    - Potential need turning to specific direction using compass 
 
 Fishing Loop
 
