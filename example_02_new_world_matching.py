@@ -11,8 +11,8 @@ image_collection = [
     ['new_world_images/haystacks/01_hold_to_cast.jpg', 'new_world_images/needles/01_hold_to_cast.jpg'],
     ['new_world_images/haystacks/02_cast_release.jpg', 'new_world_images/needles/02_cast_release.jpg'],
     ['new_world_images/haystacks/03_hook.jpg', 'new_world_images/needles/03_hook.jpg'],
-    ['new_world_images/haystacks/04_release.jpg', 'new_world_images/needles/04_release.jpg'],
-    ['new_world_images/haystacks/05_reel.jpg', 'new_world_images/needles/05_reel.jpg'],
+    ['new_world_images/haystacks/04_reel.jpg', 'new_world_images/needles/04_reel.jpg'],
+    ['new_world_images/haystacks/05_release.jpg', 'new_world_images/needles/05_release.jpg'],
     ['new_world_images/haystacks/06_success.jpg', 'new_world_images/needles/06_success.jpg'],
 ]
 
