@@ -14,29 +14,28 @@ import pydirectinput
 # TODO: Delete this
 print("Hello, this is a bit far from Dustwallow Marsh. I'll do my best!\n\nPress 'b' to start.\n Press 'n' to stop.")
 
-DEBUG = False
-
+DEBUG = True
 # Ultra-wide
-# prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
-# hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
-# cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2.jpg', cv.IMREAD_UNCHANGED)
-# hook_loc_img = cv.imread('new_world_images/needles/02_hook_loc.jpg', cv.IMREAD_UNCHANGED)
-# hook_img = cv.imread('new_world_images/needles/03_hook_2.jpg', cv.IMREAD_UNCHANGED)
-# reel_img = cv.imread('new_world_images/needles/04_reel_2.jpg', cv.IMREAD_UNCHANGED)
-# release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
-# release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
-# success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
+prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
+hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
+cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2.jpg', cv.IMREAD_UNCHANGED)
+hook_loc_img = cv.imread('new_world_images/needles/02_hook_loc.jpg', cv.IMREAD_UNCHANGED)
+hook_img = cv.imread('new_world_images/needles/03_hook_2.jpg', cv.IMREAD_UNCHANGED)
+reel_img = cv.imread('new_world_images/needles/04_reel_2.jpg', cv.IMREAD_UNCHANGED)
+release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
+release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
+success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
 
 # 1280x720
-prepare_cast_img = cv.imread('new_world_images/needles/00_needle_ian.jpg', cv.IMREAD_UNCHANGED)
-hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_ian.jpg', cv.IMREAD_UNCHANGED)
-cast_release_img = cv.imread('new_world_images/needles/02_cast_release_ian.jpg', cv.IMREAD_UNCHANGED)
-hook_loc_img = cv.imread('new_world_images/needles/02_hook_ian.jpg', cv.IMREAD_UNCHANGED)
-hook_img = cv.imread('new_world_images/needles/03_hook_ian.jpg', cv.IMREAD_UNCHANGED)
-reel_img = cv.imread('new_world_images/needles/04_reel_ian.jpg', cv.IMREAD_UNCHANGED)
-release_img = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
-release_img_2 = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
-success_img = cv.imread('new_world_images/needles/06_success_ian.jpg', cv.IMREAD_UNCHANGED)
+# prepare_cast_img = cv.imread('new_world_images/needles/00_needle_ian.jpg', cv.IMREAD_UNCHANGED)
+# hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_ian.jpg', cv.IMREAD_UNCHANGED)
+# cast_release_img = cv.imread('new_world_images/needles/02_cast_release_ian.jpg', cv.IMREAD_UNCHANGED)
+# hook_loc_img = cv.imread('new_world_images/needles/02_hook_ian.jpg', cv.IMREAD_UNCHANGED)
+# hook_img = cv.imread('new_world_images/needles/03_hook_ian.jpg', cv.IMREAD_UNCHANGED)
+# reel_img = cv.imread('new_world_images/needles/04_reel_ian.jpg', cv.IMREAD_UNCHANGED)
+# release_img = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
+# release_img_2 = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
+# success_img = cv.imread('new_world_images/needles/06_success_ian.jpg', cv.IMREAD_UNCHANGED)
 
 loop_time = time.time()
 current_action = "Waiting"
@@ -142,7 +141,7 @@ def scan_by_area(top_left, bottom_right, needle_img, needle_name="unknown", conf
 
     result = cv.matchTemplate(sub_screenshot, needle_img, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
-    # print(top_left, bottom_right, confidence_threshold)
+    print(top_left, bottom_right, max_val)
     # print(top_left, bottom_right, width, height,"max_val:", max_val)
 
     if max_val >= confidence_threshold:
@@ -236,7 +235,6 @@ while True:
             # Look for marker
             top_left_zone = (screen_width / 2 - 100, 5)
             bottom_right_zone = (screen_width / 2 + 100, 200)
-            print("Preparing to Cast")
 
             if scan_by_area(top_left_zone, bottom_right_zone, prepare_cast_img, "needle", 0.9):
                 current_action = "Cast Line"
@@ -252,11 +250,11 @@ while True:
             # print(bottom_mid_top_left_search_area, bottom_mid_bottom_right_search_area)
             print("about to cast line")
             if scan_by_area(bottom_mid_top_left_search_area, bottom_mid_bottom_right_search_area, hold_to_cast_img,
-                            "hook"):
+                            "hook", .7):
 
                 set_mouse_down(mouse_up)
 
-                release_time = round(np.random.uniform(1.1, 1.2), 3)
+                release_time = round(np.random.uniform(1.2, 1.3), 3)
                 time.sleep(release_time)
                 set_mouse_up(mouse_up)
                 time.sleep(1)
