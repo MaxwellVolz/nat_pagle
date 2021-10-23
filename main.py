@@ -8,25 +8,41 @@ import os
 import cv2 as cv
 import numpy as np
 import pyautogui
+from pynput import keyboard
+import pydirectinput
 
 # TODO: Delete this
 print("Hello, this is a bit far from Dustwallow Marsh. I'll do my best!\n\nPress 'b' to start.\n Press 'n' to stop.")
 
-DEBUG = True
+DEBUG = False
 
-hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
-cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2.jpg', cv.IMREAD_UNCHANGED)
-hook_loc_img = cv.imread('new_world_images/needles/02_hook_loc.jpg', cv.IMREAD_UNCHANGED)
-hook_img = cv.imread('new_world_images/needles/03_hook_2.jpg', cv.IMREAD_UNCHANGED)
-reel_img = cv.imread('new_world_images/needles/04_reel_2.jpg', cv.IMREAD_UNCHANGED)
-release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
-success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
+# Ultra-wide
+# prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
+# hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
+# cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2.jpg', cv.IMREAD_UNCHANGED)
+# hook_loc_img = cv.imread('new_world_images/needles/02_hook_loc.jpg', cv.IMREAD_UNCHANGED)
+# hook_img = cv.imread('new_world_images/needles/03_hook_2.jpg', cv.IMREAD_UNCHANGED)
+# reel_img = cv.imread('new_world_images/needles/04_reel_2.jpg', cv.IMREAD_UNCHANGED)
+# release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
+# release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
+# success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
+
+# 1280x720
+prepare_cast_img = cv.imread('new_world_images/needles/00_needle_ian.jpg', cv.IMREAD_UNCHANGED)
+hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_ian.jpg', cv.IMREAD_UNCHANGED)
+cast_release_img = cv.imread('new_world_images/needles/02_cast_release_ian.jpg', cv.IMREAD_UNCHANGED)
+hook_loc_img = cv.imread('new_world_images/needles/02_hook_ian.jpg', cv.IMREAD_UNCHANGED)
+hook_img = cv.imread('new_world_images/needles/03_hook_ian.jpg', cv.IMREAD_UNCHANGED)
+reel_img = cv.imread('new_world_images/needles/04_reel_ian.jpg', cv.IMREAD_UNCHANGED)
+release_img = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
+release_img_2 = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
+success_img = cv.imread('new_world_images/needles/06_success_ian.jpg', cv.IMREAD_UNCHANGED)
 
 loop_time = time.time()
 current_action = "Waiting"
 
 if DEBUG:
-    current_action = "Cast Line"
+    current_action = "Prepare to Cast"
 
 hook_top_left = 0
 hook_bottom_right = 0
@@ -72,7 +88,7 @@ def draw_rectangle_on_match(haystack_img, needle_img, needle_name, max_loc):
         cv.imwrite(save_file_name, haystack_img)
 
 
-def scan_for_image(haystack_img, needle_img, needle_name="unknown", confidence_threshold=0.85):
+def scan_for_image(haystack_img, needle_img, needle_name="unknown", confidence_threshold=0.8):
     result = cv.matchTemplate(haystack_img, needle_img, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
 
@@ -89,8 +105,7 @@ def scan_for_image(haystack_img, needle_img, needle_name="unknown", confidence_t
         return False
 
 
-def get_hook_search_area(haystack_img, needle_img, needle_name="unknown", confidence_threshold=0.85, max_attempts=100):
-
+def get_hook_search_area(haystack_img, needle_img, needle_name="unknown", confidence_threshold=0.8, max_attempts=100):
     result = cv.matchTemplate(haystack_img, needle_img, cv.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
 
@@ -100,11 +115,13 @@ def get_hook_search_area(haystack_img, needle_img, needle_name="unknown", confid
         needle_h = needle_img.shape[0]
 
         top_left = list(max_loc)
-        search_area_top_left = tuple([top_left[0] - 50, top_left[1] - 50])
-        bottom_right = (top_left[0] + needle_w + 100, top_left[1] + needle_h + 200)
+        search_area_top_left = tuple([top_left[0] - 100, top_left[1] - 50])
+        # make column extend to bottom of screen for those long pulls
+        bottom_right = (top_left[0] + needle_w + 100, screen_height - 5)
 
         if DEBUG:
-            cv.rectangle(haystack_img, search_area_top_left, bottom_right, color=(0, 255, 0), thickness=2, lineType=cv.LINE_4)
+            cv.rectangle(haystack_img, search_area_top_left, bottom_right, color=(0, 255, 0), thickness=2,
+                         lineType=cv.LINE_4)
             save_file_name = f'test_data/{test_start_time}/{current_milli_time()}_{needle_name}.jpg'
             cv.imwrite(save_file_name, haystack_img)
 
@@ -114,10 +131,9 @@ def get_hook_search_area(haystack_img, needle_img, needle_name="unknown", confid
         return [-1, 0]
 
 
-def scan_by_area(top_left, bottom_right, needle_img, needle_name="unknown", confidence_threshold=0.85):
-
-    width = bottom_right[0]-top_left[0]
-    height = bottom_right[1]-top_left[1]
+def scan_by_area(top_left, bottom_right, needle_img, needle_name="unknown", confidence_threshold=0.8):
+    width = bottom_right[0] - top_left[0]
+    height = bottom_right[1] - top_left[1]
 
     sub_screenshot = pyautogui.screenshot(region=(top_left[0], top_left[1], width, height))
     # or: screenshot = ImageGrab.grab()
@@ -145,7 +161,8 @@ def scan_by_area(top_left, bottom_right, needle_img, needle_name="unknown", conf
 def set_mouse_up(mouse_is_up):
     if not mouse_is_up:
         pyautogui.mouseUp()
-        print("Mouse Up!\n")
+        if DEBUG:
+            print("Mouse Up!\n")
         global mouse_up
         mouse_up = True
 
@@ -153,7 +170,8 @@ def set_mouse_up(mouse_is_up):
 def set_mouse_down(mouse_is_up):
     if mouse_is_up:
         pyautogui.mouseDown()
-        # print("Mouse Down...\n")
+        if DEBUG:
+            print("Mouse Down...\n")
         global mouse_up
         mouse_up = False
 
@@ -162,104 +180,165 @@ def cast_line(screenshot):
     return
 
 
+is_fishing = False
+
+
+def on_press(key):
+    global is_fishing
+    global current_action
+    if key == keyboard.Key.esc:
+        return False  # stop listener
+    try:
+        key_pressed = key.char  # single-char keys
+    except AttributeError as e:
+        key_pressed = key.name  # other keys
+
+    if key_pressed == 'b':
+        print("Start fishing")
+        current_action = "Prepare to Cast"
+        is_fishing = True
+
+    if key_pressed == 'n':
+        print("Stop fishing")
+        is_fishing = False
+
+    # Multi Catch
+    if key_pressed in ['1', '2', 'left', 'right']:  # keys of interest
+        print('Key pressed: ' + key_pressed)
+        return False  # stop listener; remove this if want more keys
+
+
+def on_release(key):
+    # print('{0} released'.format(
+    #     key))
+    if key == keyboard.Key.esc:
+        # Stop listener
+        return False
+
+
+listener = keyboard.Listener(
+    on_press=on_press,
+    on_release=on_release)
+listener.start()
+
 while True:
+    # print("truing")
+    if is_fishing:
+        screenshot = get_screenshot()
 
-    screenshot = get_screenshot()
+        # cv.imshow('Computer Vision', screenshot)
 
-    cv.imshow('Computer Vision', screenshot)
+        # print(f'FPS {1 / (time() - loop_time)}')
+        loop_time = time.time()
 
-    # print(f'FPS {1 / (time() - loop_time)}')
-    loop_time = time.time()
+        # Check for marker in top middle of screen
+        if current_action == "Prepare to Cast":
+            # Look for marker
+            top_left_zone = (screen_width / 2 - 100, 5)
+            bottom_right_zone = (screen_width / 2 + 100, 200)
+            print("Preparing to Cast")
 
-    # Check
+            if scan_by_area(top_left_zone, bottom_right_zone, prepare_cast_img, "needle", 0.9):
+                current_action = "Cast Line"
+                print("Preparing to Cast")
+            else:
+                mouse_x, mouse_y = pyautogui.position()
+                # pyautogui.move(100, 0, 1, pyautogui.easeInQuad)
+                pydirectinput.move(30, 0)
+                print(f"Moving the mouse! Eek. (x:{mouse_x}, y:{mouse_y})")
 
-    if current_action == "Cast Line":
-        # if scan_for_image(screenshot, hold_to_cast_img, "casting"):
-        # print(bottom_mid_top_left_search_area, bottom_mid_bottom_right_search_area)
-        if scan_by_area(bottom_mid_top_left_search_area, bottom_mid_bottom_right_search_area, hold_to_cast_img, "hook"):
+        if current_action == "Cast Line":
+            # if scan_for_image(screenshot, hold_to_cast_img, "casting"):
+            # print(bottom_mid_top_left_search_area, bottom_mid_bottom_right_search_area)
+            print("about to cast line")
+            if scan_by_area(bottom_mid_top_left_search_area, bottom_mid_bottom_right_search_area, hold_to_cast_img,
+                            "hook"):
 
-            set_mouse_down(mouse_up)
+                set_mouse_down(mouse_up)
 
-            release_time = round(np.random.uniform(1.8, 2.1), 3)
-            time.sleep(release_time)
-            set_mouse_up(mouse_up)
-            time.sleep(1)
+                release_time = round(np.random.uniform(1.1, 1.2), 3)
+                time.sleep(release_time)
+                set_mouse_up(mouse_up)
+                time.sleep(1)
 
-            if DEBUG:
-                print(f"Cast Release Time: {release_time}s")
-                print("Find hook location")
+                if DEBUG:
+                    print(f"Cast Release Time: {release_time}s")
+                    print("Find hook location")
 
-            current_action = "Find hook location"
+                current_action = "Find hook location"
 
-    if current_action == "Find hook location":
-        hook_top_left, hook_bottom_right = get_hook_search_area(screenshot, hook_loc_img, "hook_location")
+        if current_action == "Find hook location":
+            hook_top_left, hook_bottom_right = get_hook_search_area(screenshot, hook_loc_img, "hook_location")
 
-        print(hook_top_left, hook_bottom_right)
+            print(hook_top_left, hook_bottom_right)
 
-        if hook_top_left != -1:
-            current_action = "Waiting for fish"
+            if hook_top_left != -1:
+                current_action = "Waiting for fish"
 
-    if current_action == "Waiting for fish":
+        if current_action == "Waiting for fish":
 
-        if scan_by_area(hook_top_left, hook_bottom_right, hook_img, "hook"):
-            set_mouse_down(mouse_up)
-            current_action = "Reeling it in"
+            if scan_by_area(hook_top_left, hook_bottom_right, hook_img, "hook"):
+                set_mouse_down(mouse_up)
+                current_action = "Reeling it in"
 
-            if DEBUG:
-                print("Setting the hook")
+                if DEBUG:
+                    print("Setting the hook")
 
-    if current_action == "Setting the hook":
-        if scan_by_area(hook_top_left, hook_bottom_right, hook_img, "hook"):
-            set_mouse_down(mouse_up)
-            current_action = "Reeling it in"
+        if current_action == "Setting the hook":
+            if scan_by_area(hook_top_left, hook_bottom_right, hook_img, "hook"):
+                set_mouse_down(mouse_up)
+                current_action = "Reeling it in"
 
-            if DEBUG:
-                print("Setting the hook")
+                if DEBUG:
+                    print("Setting the hook")
 
-    if current_action == "Reeling it in":
-        # Check if caught
-        if scan_for_image(screenshot, hold_to_cast_img, "catch"):
-            set_mouse_up(mouse_up)
+        if current_action == "Reeling it in":
+            # Check if caught
+            if scan_for_image(screenshot, hold_to_cast_img, "catch"):
+                set_mouse_up(mouse_up)
+                current_action = "Prepare to Cast"
+                time.sleep(2)
+
+                if DEBUG:
+                    print("Caught! Cast Line...")
+
+            # Check if need to back off
+            if scan_by_area(hook_top_left, hook_bottom_right, release_img, "spooling", 0.7) or \
+                    scan_by_area(hook_top_left, hook_bottom_right, release_img_2, "spooling", 0.7):
+                set_mouse_up(mouse_up)
+                current_action = "Free-Spool"
+
+                if DEBUG:
+                    print("Free-Spool")
+
+        if current_action == "Free-Spool":
+            # Check if caught
+            if scan_for_image(screenshot, hold_to_cast_img, "catch"):
+                set_mouse_up(mouse_up)
+                current_action = "Prepare to Cast"
+                time.sleep(2)
+
+                if DEBUG:
+                    print("Caught! Cast Line...")
+
+            if scan_by_area(hook_top_left, hook_bottom_right, reel_img, "reeling"):
+                set_mouse_down(mouse_up)
+                current_action = "Reeling it in"
+
+                if DEBUG:
+                    print("Reeling it in")
+
+        # 'B' and 'N' are unbound
+        if cv.waitKey(1) == ord('b'):
             current_action = "Cast Line"
+            print("Started...")
 
-            if DEBUG:
-                print("Caught! Cast Line...")
+        if cv.waitKey(1) == ord('n'):
+            current_action = "Waiting"
+            print("Waiting")
 
-        # Check if need to back off
-        if scan_by_area(hook_top_left, hook_bottom_right, release_img, "spooling", 0.7):
-            set_mouse_up(mouse_up)
-            current_action = "Free-Spool"
-
-            if DEBUG:
-                print("Free-Spool")
-
-    if current_action == "Free-Spool":
-        # Check if caught
-        if scan_for_image(screenshot, hold_to_cast_img, "catch"):
-            set_mouse_up(mouse_up)
-            current_action = "Cast Line"
-
-            if DEBUG:
-                print("Caught! Cast Line...")
-
-        if scan_by_area(hook_top_left, hook_bottom_right, reel_img, "reeling"):
-            set_mouse_down(mouse_up)
-            current_action = "Reeling it in"
-
-            if DEBUG:
-                print("Reeling it in")
-
-    # 'B' and 'N' are unbound
-    if cv.waitKey(1) == ord('b'):
-        current_action = "Cast Line"
-        print("Started...")
-
-    if cv.waitKey(1) == ord('n'):
-        current_action = "Waiting"
-        print("Waiting")
-
-    # press 'q' with the output window focused to exit.
-    # waits 1 ms every loop to process key presses
-    if cv.waitKey(1) == ord('q'):
-        cv.destroyAllWindows()
-        break
+        # press 'q' with the output window focused to exit.
+        # waits 1 ms every loop to process key presses
+        if cv.waitKey(1) == ord('q'):
+            cv.destroyAllWindows()
+            break
