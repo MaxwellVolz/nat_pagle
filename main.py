@@ -16,15 +16,26 @@ print("Hello, this is a bit far from Dustwallow Marsh. I'll do my best!\n\nPress
 
 DEBUG = True
 # Ultra-wide
-prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
-hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
-cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2.jpg', cv.IMREAD_UNCHANGED)
-hook_loc_img = cv.imread('new_world_images/needles/02_hook_loc.jpg', cv.IMREAD_UNCHANGED)
-hook_img = cv.imread('new_world_images/needles/03_hook_2.jpg', cv.IMREAD_UNCHANGED)
-reel_img = cv.imread('new_world_images/needles/04_reel_2.jpg', cv.IMREAD_UNCHANGED)
-release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
-release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
-success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
+# prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
+# hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
+# cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2.jpg', cv.IMREAD_UNCHANGED)
+# hook_loc_img = cv.imread('new_world_images/needles/02_hook_loc.jpg', cv.IMREAD_UNCHANGED)
+# hook_img = cv.imread('new_world_images/needles/03_hook_2.jpg', cv.IMREAD_UNCHANGED)
+# reel_img = cv.imread('new_world_images/needles/04_reel_2.jpg', cv.IMREAD_UNCHANGED)
+# release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
+# release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
+# success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
+
+# 1920x1080
+prepare_cast_img = cv.imread('new_world_images/needles/00_needle_1920.jpg', cv.IMREAD_UNCHANGED)
+hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_1920.jpg', cv.IMREAD_UNCHANGED)
+cast_release_img = cv.imread('new_world_images/needles/02_cast_release_1920.jpg', cv.IMREAD_UNCHANGED)
+hook_loc_img = cv.imread('new_world_images/needles/02_hook_1920.jpg', cv.IMREAD_UNCHANGED)
+hook_img = cv.imread('new_world_images/needles/03_hook_1920.jpg', cv.IMREAD_UNCHANGED)
+reel_img = cv.imread('new_world_images/needles/04_reel_1920.jpg', cv.IMREAD_UNCHANGED)
+release_img = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
+release_img_2 = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
+success_img = cv.imread('new_world_images/needles/06_success_1920.jpg', cv.IMREAD_UNCHANGED)
 
 # 1280x720
 # prepare_cast_img = cv.imread('new_world_images/needles/00_needle_ian.jpg', cv.IMREAD_UNCHANGED)
@@ -143,6 +154,7 @@ def scan_by_area(top_left, bottom_right, needle_img, needle_name="unknown", conf
     min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
     print(top_left, bottom_right, max_val)
     # print(top_left, bottom_right, width, height,"max_val:", max_val)
+    # draw_rectangle_on_match(sub_screenshot, needle_img, needle_name, max_loc)
 
     if max_val >= confidence_threshold:
         find_str = f'Found [{needle_name}]'
@@ -233,8 +245,8 @@ while True:
         # Check for marker in top middle of screen
         if current_action == "Prepare to Cast":
             # Look for marker
-            top_left_zone = (screen_width / 2 - 100, 5)
-            bottom_right_zone = (screen_width / 2 + 100, 200)
+            top_left_zone = (screen_width / 2 - 80, 5)
+            bottom_right_zone = (screen_width / 2 + 80, 200)
 
             if scan_by_area(top_left_zone, bottom_right_zone, prepare_cast_img, "needle", 0.9):
                 current_action = "Cast Line"
@@ -254,7 +266,7 @@ while True:
 
                 set_mouse_down(mouse_up)
 
-                release_time = round(np.random.uniform(1.2, 1.3), 3)
+                release_time = round(np.random.uniform(1.0, 1.2), 3)
                 time.sleep(release_time)
                 set_mouse_up(mouse_up)
                 time.sleep(1)
