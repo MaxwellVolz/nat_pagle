@@ -14,7 +14,7 @@ import pydirectinput
 # TODO: Delete this
 print("Hello, this is a bit far from Dustwallow Marsh. I'll do my best!\n\nPress 'b' to start.\n Press 'n' to stop.")
 
-DEBUG = True
+DEBUG = False
 # Ultra-wide
 # prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
 # hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
@@ -26,16 +26,27 @@ DEBUG = True
 # release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
 # success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
 
+# 2560
+prepare_cast_img = cv.imread('new_world_images/needles/00_needle_2560.jpg', cv.IMREAD_UNCHANGED)
+hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2560.jpg', cv.IMREAD_UNCHANGED)
+cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2560.jpg', cv.IMREAD_UNCHANGED)
+hook_loc_img = cv.imread('new_world_images/needles/02_hook_2560.jpg', cv.IMREAD_UNCHANGED)
+hook_img = cv.imread('new_world_images/needles/03_hook_2560.jpg', cv.IMREAD_UNCHANGED)
+reel_img = cv.imread('new_world_images/needles/04_reel_2560.jpg', cv.IMREAD_UNCHANGED)
+release_img = cv.imread('new_world_images/needles/05_release_2560.jpg', cv.IMREAD_UNCHANGED)
+release_img_2 = cv.imread('new_world_images/needles/05_release_2560.jpg', cv.IMREAD_UNCHANGED)
+success_img = cv.imread('new_world_images/needles/06_success_2560.jpg', cv.IMREAD_UNCHANGED)
+
 # 1920x1080
-prepare_cast_img = cv.imread('new_world_images/needles/00_needle_1920.jpg', cv.IMREAD_UNCHANGED)
-hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_1920.jpg', cv.IMREAD_UNCHANGED)
-cast_release_img = cv.imread('new_world_images/needles/02_cast_release_1920.jpg', cv.IMREAD_UNCHANGED)
-hook_loc_img = cv.imread('new_world_images/needles/02_hook_1920.jpg', cv.IMREAD_UNCHANGED)
-hook_img = cv.imread('new_world_images/needles/03_hook_1920.jpg', cv.IMREAD_UNCHANGED)
-reel_img = cv.imread('new_world_images/needles/04_reel_1920.jpg', cv.IMREAD_UNCHANGED)
-release_img = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
-release_img_2 = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
-success_img = cv.imread('new_world_images/needles/06_success_1920.jpg', cv.IMREAD_UNCHANGED)
+# prepare_cast_img = cv.imread('new_world_images/needles/00_needle_1920.jpg', cv.IMREAD_UNCHANGED)
+# hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_1920.jpg', cv.IMREAD_UNCHANGED)
+# cast_release_img = cv.imread('new_world_images/needles/02_cast_release_1920.jpg', cv.IMREAD_UNCHANGED)
+# hook_loc_img = cv.imread('new_world_images/needles/02_hook_1920.jpg', cv.IMREAD_UNCHANGED)
+# hook_img = cv.imread('new_world_images/needles/03_hook_1920.jpg', cv.IMREAD_UNCHANGED)
+# reel_img = cv.imread('new_world_images/needles/04_reel_1920.jpg', cv.IMREAD_UNCHANGED)
+# release_img = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
+# release_img_2 = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
+# success_img = cv.imread('new_world_images/needles/06_success_1920.jpg', cv.IMREAD_UNCHANGED)
 
 # 1280x720
 # prepare_cast_img = cv.imread('new_world_images/needles/00_needle_ian.jpg', cv.IMREAD_UNCHANGED)
@@ -254,7 +265,7 @@ while True:
             else:
                 mouse_x, mouse_y = pyautogui.position()
                 # pyautogui.move(100, 0, 1, pyautogui.easeInQuad)
-                pydirectinput.move(30, 0)
+                pydirectinput.move(30, None)
                 print(f"Moving the mouse! Eek. (x:{mouse_x}, y:{mouse_y})")
 
         if current_action == "Cast Line":
