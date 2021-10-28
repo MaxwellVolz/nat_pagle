@@ -12,7 +12,20 @@ from pynput import keyboard
 import pydirectinput
 import msvcrt
 
-# TODO: Delete this
+import sys
+import os
+
+# pyinstaller relative path solution
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app
+    # path into variable _MEIPASS'.
+    application_path = sys._MEIPASS
+else:
+    application_path = os.path.dirname(os.path.abspath(__file__))
+
+print("Application Path:", application_path)
+
 print("""
 Select your resolution:
     (1) 1920x1280
@@ -20,6 +33,7 @@ Select your resolution:
     (3) 3620x2036
     (4) 1280x720
 """)
+
 resolution_selection = msvcrt.getch()
 
 if resolution_selection == b'1':
@@ -44,7 +58,6 @@ elif resolution_selection == b'2':
     release_img = cv.imread('new_world_images/needles/05_release_2560.jpg', cv.IMREAD_UNCHANGED)
     release_img_2 = cv.imread('new_world_images/needles/05_release_2560.jpg', cv.IMREAD_UNCHANGED)
     success_img = cv.imread('new_world_images/needles/06_success_2560.jpg', cv.IMREAD_UNCHANGED)
-
 elif resolution_selection == b'3':
     print("Selection: 3620x2036")
     prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
@@ -56,7 +69,6 @@ elif resolution_selection == b'3':
     release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
     release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
     success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
-
 elif resolution_selection == b'4':
     print("Selection: 1280x720")
     prepare_cast_img = cv.imread('new_world_images/needles/00_needle_ian.jpg', cv.IMREAD_UNCHANGED)
@@ -88,7 +100,7 @@ How to use:
  /_/_                 `-.
 ########~~~~~~~~~~~~~~~~~`<))><~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Warning: Bot should not be left unmonitored for more that 20 minutes.
+Warning: Bot should not be left unmonitored for more than 20 minutes.
 
 """)
 
@@ -106,6 +118,8 @@ hook_bottom_right = 0
 # Action control to prevent wasting effort
 mouse_up = True
 moving_right = True
+is_fishing = False
+
 
 def current_milli_time():
     return round(time.time() * 1000)
@@ -234,13 +248,6 @@ def set_mouse_down(mouse_is_up):
         mouse_up = False
 
 
-def cast_line(screenshot):
-    return
-
-
-is_fishing = False
-
-
 def on_press(key):
     global is_fishing
     global current_action
@@ -261,14 +268,12 @@ def on_press(key):
         is_fishing = False
 
     # Multi Catch
-    if key_pressed in ['1', '2', 'left', 'right']:  # keys of interest
-        print('Key pressed: ' + key_pressed)
-        return False  # stop listener; remove this if want more keys
+    # if key_pressed in ['1', '2', 'left', 'right']:  # keys of interest
+    #     print('Key pressed: ' + key_pressed)
+    #     return False  # stop listener; remove this if want more keys
 
 
 def on_release(key):
-    # print('{0} released'.format(
-    #     key))
     if key == keyboard.Key.esc:
         # Stop listener
         return False
@@ -281,17 +286,16 @@ listener.start()
 
 # Main Loop
 while True:
-    # print("truing")
     if is_fishing:
         screenshot = get_screenshot()
 
         # cv.imshow('Computer Vision', screenshot)
-
-        # print(f'FPS {1 / (time() - loop_time)}')
         loop_time = time.time()
+        # print(f'FPS {1 / (time() - loop_time)}')
 
         # Check for marker in top middle of screen
         if current_action == "Prepare to Cast":
+
             # Look for marker
             top_left_zone = (screen_width / 2 - 80, 5)
             bottom_right_zone = (screen_width / 2 + 80, 200)
@@ -301,10 +305,9 @@ while True:
                 print("Preparing to Cast")
             else:
                 mouse_x, mouse_y = pyautogui.position()
-                # pyautogui.move(100, 0, 1, pyautogui.easeInQuad)
 
                 if mouse_x >= 2550:
-                    moving_right = False
+                    moving_1 = False
                 elif mouse_x <= 50:
                     move_right = True
 
@@ -318,7 +321,7 @@ while True:
         if current_action == "Cast Line":
             # if scan_for_image(screenshot, hold_to_cast_img, "casting"):
             # print(bottom_mid_top_left_search_area, bottom_mid_bottom_right_search_area)
-            print("about to cast line")
+            print("About to cast line...")
             if scan_by_area(bottom_mid_top_left_search_area, bottom_mid_bottom_right_search_area, hold_to_cast_img,
                             "hook", .7):
 

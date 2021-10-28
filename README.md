@@ -56,3 +56,11 @@ Fishing Loop
     - Reel in the fish until the white circle on the outside of the tension meter completes the circle, and the distance reaches 0.0m.
 
 Congratulations! You've caught a fish!
+
+
+## How to build
+
+```shell
+pyinstaller --noconfirm --onedir --console --icon "C:/Users/narfa/Documents/_git/nat_pagle/03_hook_2.ico" --add-data "C
+:/Users/narfa/Documents/_git/nat_pagle/new_world_images/needles;new_world_images/needles/"  "C:/Users/narfa/Documents/_git/nat_pagle/main.py"
+```
