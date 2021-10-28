@@ -10,54 +10,89 @@ import numpy as np
 import pyautogui
 from pynput import keyboard
 import pydirectinput
+import msvcrt
 
 # TODO: Delete this
-print("Hello, this is a bit far from Dustwallow Marsh. I'll do my best!\n\nPress 'b' to start.\n Press 'n' to stop.")
+print("""
+Select your resolution:
+    (1) 1920x1280
+    (2) 2560x1440
+    (3) 3620x2036
+    (4) 1280x720
+""")
+resolution_selection = msvcrt.getch()
+
+if resolution_selection == b'1':
+    print("Selection: 1920x1280")
+    prepare_cast_img = cv.imread('new_world_images/needles/00_needle_1920.jpg', cv.IMREAD_UNCHANGED)
+    hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_1920.jpg', cv.IMREAD_UNCHANGED)
+    cast_release_img = cv.imread('new_world_images/needles/02_cast_release_1920.jpg', cv.IMREAD_UNCHANGED)
+    hook_loc_img = cv.imread('new_world_images/needles/02_hook_1920.jpg', cv.IMREAD_UNCHANGED)
+    hook_img = cv.imread('new_world_images/needles/03_hook_1920.jpg', cv.IMREAD_UNCHANGED)
+    reel_img = cv.imread('new_world_images/needles/04_reel_1920.jpg', cv.IMREAD_UNCHANGED)
+    release_img = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
+    release_img_2 = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
+    success_img = cv.imread('new_world_images/needles/06_success_1920.jpg', cv.IMREAD_UNCHANGED)
+elif resolution_selection == b'2':
+    print("Selection: 2560x1440")
+    prepare_cast_img = cv.imread('new_world_images/needles/00_needle_2560.jpg', cv.IMREAD_UNCHANGED)
+    hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2560.jpg', cv.IMREAD_UNCHANGED)
+    cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2560.jpg', cv.IMREAD_UNCHANGED)
+    hook_loc_img = cv.imread('new_world_images/needles/02_hook_2560.jpg', cv.IMREAD_UNCHANGED)
+    hook_img = cv.imread('new_world_images/needles/03_hook_2560.jpg', cv.IMREAD_UNCHANGED)
+    reel_img = cv.imread('new_world_images/needles/04_reel_2560.jpg', cv.IMREAD_UNCHANGED)
+    release_img = cv.imread('new_world_images/needles/05_release_2560.jpg', cv.IMREAD_UNCHANGED)
+    release_img_2 = cv.imread('new_world_images/needles/05_release_2560.jpg', cv.IMREAD_UNCHANGED)
+    success_img = cv.imread('new_world_images/needles/06_success_2560.jpg', cv.IMREAD_UNCHANGED)
+
+elif resolution_selection == b'3':
+    print("Selection: 3620x2036")
+    prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
+    hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
+    cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2.jpg', cv.IMREAD_UNCHANGED)
+    hook_loc_img = cv.imread('new_world_images/needles/02_hook_loc.jpg', cv.IMREAD_UNCHANGED)
+    hook_img = cv.imread('new_world_images/needles/03_hook_2.jpg', cv.IMREAD_UNCHANGED)
+    reel_img = cv.imread('new_world_images/needles/04_reel_2.jpg', cv.IMREAD_UNCHANGED)
+    release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
+    release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
+    success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
+
+elif resolution_selection == b'4':
+    print("Selection: 1280x720")
+    prepare_cast_img = cv.imread('new_world_images/needles/00_needle_ian.jpg', cv.IMREAD_UNCHANGED)
+    hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_ian.jpg', cv.IMREAD_UNCHANGED)
+    cast_release_img = cv.imread('new_world_images/needles/02_cast_release_ian.jpg', cv.IMREAD_UNCHANGED)
+    hook_loc_img = cv.imread('new_world_images/needles/02_hook_ian.jpg', cv.IMREAD_UNCHANGED)
+    hook_img = cv.imread('new_world_images/needles/03_hook_ian.jpg', cv.IMREAD_UNCHANGED)
+    reel_img = cv.imread('new_world_images/needles/04_reel_ian.jpg', cv.IMREAD_UNCHANGED)
+    release_img = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
+    release_img_2 = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
+    success_img = cv.imread('new_world_images/needles/06_success_ian.jpg', cv.IMREAD_UNCHANGED)
+else:
+    print("Invalid selection. Goodbye.")
+
+print("""
+Nat Pagle here, a bit far from Dustwallow Marsh but I'll do my best!
+
+How to use:
+    1. Set your waypoint to behind the spot. (see below)
+    2. Press 'b' to start/restart.
+    3. Press 'n' to pause.
+
+
+      /`-.                                  [X] <-- Waypoint
+     /    `-.
+  O /        `-.
+  |-            `-.
+  /\\               `-.
+ /_/_                 `-.
+########~~~~~~~~~~~~~~~~~`<))><~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Warning: Bot should not be left unmonitored for more that 20 minutes.
+
+""")
 
 DEBUG = False
-# Ultra-wide
-# prepare_cast_img = cv.imread('new_world_images/needles/00_needle.jpg', cv.IMREAD_UNCHANGED)
-# hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2.jpg', cv.IMREAD_UNCHANGED)
-# cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2.jpg', cv.IMREAD_UNCHANGED)
-# hook_loc_img = cv.imread('new_world_images/needles/02_hook_loc.jpg', cv.IMREAD_UNCHANGED)
-# hook_img = cv.imread('new_world_images/needles/03_hook_2.jpg', cv.IMREAD_UNCHANGED)
-# reel_img = cv.imread('new_world_images/needles/04_reel_2.jpg', cv.IMREAD_UNCHANGED)
-# release_img = cv.imread('new_world_images/needles/05_release_2.jpg', cv.IMREAD_UNCHANGED)
-# release_img_2 = cv.imread('new_world_images/needles/05_release_3.jpg', cv.IMREAD_UNCHANGED)
-# success_img = cv.imread('new_world_images/needles/06_success_2.jpg', cv.IMREAD_UNCHANGED)
-
-# 2560
-prepare_cast_img = cv.imread('new_world_images/needles/00_needle_2560.jpg', cv.IMREAD_UNCHANGED)
-hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_2560.jpg', cv.IMREAD_UNCHANGED)
-cast_release_img = cv.imread('new_world_images/needles/02_cast_release_2560.jpg', cv.IMREAD_UNCHANGED)
-hook_loc_img = cv.imread('new_world_images/needles/02_hook_2560.jpg', cv.IMREAD_UNCHANGED)
-hook_img = cv.imread('new_world_images/needles/03_hook_2560.jpg', cv.IMREAD_UNCHANGED)
-reel_img = cv.imread('new_world_images/needles/04_reel_2560.jpg', cv.IMREAD_UNCHANGED)
-release_img = cv.imread('new_world_images/needles/05_release_2560.jpg', cv.IMREAD_UNCHANGED)
-release_img_2 = cv.imread('new_world_images/needles/05_release_2560.jpg', cv.IMREAD_UNCHANGED)
-success_img = cv.imread('new_world_images/needles/06_success_2560.jpg', cv.IMREAD_UNCHANGED)
-
-# 1920x1080
-# prepare_cast_img = cv.imread('new_world_images/needles/00_needle_1920.jpg', cv.IMREAD_UNCHANGED)
-# hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_1920.jpg', cv.IMREAD_UNCHANGED)
-# cast_release_img = cv.imread('new_world_images/needles/02_cast_release_1920.jpg', cv.IMREAD_UNCHANGED)
-# hook_loc_img = cv.imread('new_world_images/needles/02_hook_1920.jpg', cv.IMREAD_UNCHANGED)
-# hook_img = cv.imread('new_world_images/needles/03_hook_1920.jpg', cv.IMREAD_UNCHANGED)
-# reel_img = cv.imread('new_world_images/needles/04_reel_1920.jpg', cv.IMREAD_UNCHANGED)
-# release_img = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
-# release_img_2 = cv.imread('new_world_images/needles/05_release_1920.jpg', cv.IMREAD_UNCHANGED)
-# success_img = cv.imread('new_world_images/needles/06_success_1920.jpg', cv.IMREAD_UNCHANGED)
-
-# 1280x720
-# prepare_cast_img = cv.imread('new_world_images/needles/00_needle_ian.jpg', cv.IMREAD_UNCHANGED)
-# hold_to_cast_img = cv.imread('new_world_images/needles/01_hold_to_cast_ian.jpg', cv.IMREAD_UNCHANGED)
-# cast_release_img = cv.imread('new_world_images/needles/02_cast_release_ian.jpg', cv.IMREAD_UNCHANGED)
-# hook_loc_img = cv.imread('new_world_images/needles/02_hook_ian.jpg', cv.IMREAD_UNCHANGED)
-# hook_img = cv.imread('new_world_images/needles/03_hook_ian.jpg', cv.IMREAD_UNCHANGED)
-# reel_img = cv.imread('new_world_images/needles/04_reel_ian.jpg', cv.IMREAD_UNCHANGED)
-# release_img = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
-# release_img_2 = cv.imread('new_world_images/needles/05_release_ian.jpg', cv.IMREAD_UNCHANGED)
-# success_img = cv.imread('new_world_images/needles/06_success_ian.jpg', cv.IMREAD_UNCHANGED)
 
 loop_time = time.time()
 current_action = "Waiting"
@@ -76,10 +111,11 @@ def current_milli_time():
     return round(time.time() * 1000)
 
 
-cwd = os.getcwd()
-test_start_time = current_milli_time()
-current_run_directory = path = os.path.join(cwd, f"test_data\\{test_start_time}")
-os.mkdir(current_run_directory)
+if DEBUG:
+    cwd = os.getcwd()
+    test_start_time = current_milli_time()
+    current_run_directory = path = os.path.join(cwd, f"test_data\\{test_start_time}")
+    os.mkdir(current_run_directory)
 
 screen_width, screen_height = pyautogui.size()
 
@@ -243,6 +279,7 @@ listener = keyboard.Listener(
     on_release=on_release)
 listener.start()
 
+# Main Loop
 while True:
     # print("truing")
     if is_fishing:
@@ -276,7 +313,6 @@ while True:
                             "hook", .7):
 
                 set_mouse_down(mouse_up)
-
                 release_time = round(np.random.uniform(1.0, 1.2), 3)
                 time.sleep(release_time)
                 set_mouse_up(mouse_up)

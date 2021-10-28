@@ -10,3 +10,5 @@ pywin32==302
 six==1.16.0
 
 PyAutoGUI~=0.9.53
+PyDirectInput~=1.0.4
+pynput~=1.7.4
