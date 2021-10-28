@@ -70,7 +70,7 @@ hook_bottom_right = 0
 
 # Action control to prevent wasting effort
 mouse_up = True
-
+moving_right = True
 
 def current_milli_time():
     return round(time.time() * 1000)
@@ -265,8 +265,18 @@ while True:
             else:
                 mouse_x, mouse_y = pyautogui.position()
                 # pyautogui.move(100, 0, 1, pyautogui.easeInQuad)
-                pydirectinput.move(30, None)
-                print(f"Moving the mouse! Eek. (x:{mouse_x}, y:{mouse_y})")
+
+                if mouse_x >= 2550:
+                    moving_right = False
+                elif mouse_x <= 50:
+                    move_right = True
+
+                if moving_right:
+                    pydirectinput.move(30, None)
+                else:
+                    pydirectinput.move(-30, None)
+
+                print(f"Moving the mouse! (x:{mouse_x}, y:{mouse_y})")
 
         if current_action == "Cast Line":
             # if scan_for_image(screenshot, hold_to_cast_img, "casting"):
